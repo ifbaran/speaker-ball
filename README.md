@@ -1,3 +1,10 @@
+Projeyi geliştirmek isterseniz src klasörü sizi bekliyor.
+
+
+Eğer speaker ball uygulamasına doğrudan ulaşmak isterseniz build klasörünün altındaki index.html'i çalıştırabilirsiniz.
+
+
+------------------------------------------------
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

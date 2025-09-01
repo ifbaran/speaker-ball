@@ -32,16 +32,34 @@ function App() {
       timer = setInterval(() => {
         setTimeLeft(prevTime => prevTime - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
-      setIsRunning(false);
-      // Süre bitince aktif kullanıcıyı kullanılmış listesine ekle
+    } else if (timeLeft === 0 && isRunning) {
+      // Süre bitince mevcut kullanıcıyı kullanılmış listesine ekle
       if (activeUser) {
-        setUsedUsers(prev => [...prev, activeUser.id]);
-        setActiveUser(null);
+        const updatedUsedUsers = [...usedUsers, activeUser.id];
+        setUsedUsers(updatedUsedUsers);
+        
+        // Kullanılabilir kullanıcıları filtrele
+        const availableUsers = users.filter(user => !updatedUsedUsers.includes(user.id));
+        
+        if (availableUsers.length > 0) {
+          // Yeni kullanıcı seç
+          const randomIndex = Math.floor(Math.random() * availableUsers.length);
+          const newUser = availableUsers[randomIndex];
+          
+          // Yeni kullanıcıyı aktif yap ve sayacı sıfırla
+          setActiveUser(newUser);
+          const totalSeconds = (customMinutes * 60) + parseInt(customSeconds);
+          setTimeLeft(totalSeconds > 0 ? totalSeconds : 60);
+        } else {
+          // Tüm kullanıcılar konuştuysa
+          setIsRunning(false);
+          setActiveUser(null);
+          alert('Tüm kullanıcılar konuştu! Yeni tur başlatmak için sıfırla butonuna tıklayın.');
+        }
       }
     }
     return () => clearInterval(timer);
-  }, [isRunning, timeLeft, activeUser]);
+  }, [isRunning, timeLeft, activeUser, usedUsers, users, customMinutes, customSeconds]);
 
   // Kullanılabilir kullanıcıları filtrele (daha önce seçilmemiş olanlar)
   const getAvailableUsers = () => {
